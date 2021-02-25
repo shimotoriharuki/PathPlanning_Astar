@@ -47,29 +47,21 @@ title('バイナリマップ')
 xlabel('x')
 ylabel('y')
 
-%% 計算
+% 計算
 % -----------A star開始------------ %
-%{
-index.x = course_x + linspace(1, 1, length(course_x));  %コースの座標をマップのインデックスに使うため、すべての要素に1足す
-index.y = course_y + linspace(1, 1, length(course_y));
-index.max_x = size_x;
-index.max_y = size_y;
-index.start_x = index.x(1);
-index.start_y = index.y(1);
-index.end_x = index.x(end);
-index.end_y = index.y(end);
 
+map.grid(1, 1).score = calcScore(map, 1, 1); %スタートのスコアを計算
+map.grid(1, 1).score
+% map.grid(1, 1).score = 10;
 
-map(index.start_x, index.start_y) %行列：y, x
-cost_map = createCostMap(index.start_x, index.start_y, map);
-
-
-
-function cost = getHcost(node_pos, goal_pos)
-    cost = goal_pos(1) - node_pos(1) + goal_pos(2) - node_pos(2);
+function score = calcScore(map, x, y)
+    map.grid(y, x).g_cost = 0;
+    map.grid(y, x).h_cost = map.goal_x - x + map.goal_y - y;
+    score = map.grid(y, x).g_cost + map.grid(y, x).h_cost;
 end
 
-%}
+
+
 
 
 

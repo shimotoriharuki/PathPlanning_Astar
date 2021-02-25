@@ -4,6 +4,7 @@ classdef Node
         status % 0:None, 1:Open, -1:close
         g_cost
         h_cost
+        score
         pearent % [x, y]
     end
     methods
@@ -12,6 +13,7 @@ classdef Node
             obj.status = 0;
             obj.g_cost = 0;
             obj.h_cost = 0;
+            obj.score = 0;
             obj.pearent = [0, 0];
         end
     end
