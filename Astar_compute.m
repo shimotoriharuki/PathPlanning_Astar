@@ -1,4 +1,4 @@
-%% 前処理 master
+%% 前処理 non_class
 clc
 clf
 clear
