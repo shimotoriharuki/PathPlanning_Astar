@@ -39,17 +39,17 @@ ylabel('y')
 
 % -------------------マップ作成--------------------%
 expantion = round(3); %cm 膨張させる大きさ
-[map, size_x, size_y] = createMap(course, expantion); %バイナリマップ
+map = Map(course, expantion); %バイナリマップ
 
 figure(3)
-heatmap(map)
+heatmap(map.binary_grid)
 title('バイナリマップ')
 xlabel('x')
 ylabel('y')
 
 %% 計算
 % -----------A star開始------------ %
-
+%{
 index.x = course_x + linspace(1, 1, length(course_x));  %コースの座標をマップのインデックスに使うため、すべての要素に1足す
 index.y = course_y + linspace(1, 1, length(course_y));
 index.max_x = size_x;
@@ -69,7 +69,7 @@ function cost = getHcost(node_pos, goal_pos)
     cost = goal_pos(1) - node_pos(1) + goal_pos(2) - node_pos(2);
 end
 
-
+%}
 
 
 
