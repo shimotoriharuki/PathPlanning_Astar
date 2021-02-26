@@ -4,11 +4,11 @@ clf
 clear
 
 % --------------コースデータ用意-----------------%
-course_x = round(linspace(-1, 10, 10));
-course_y = [0, 1, 2, 3, 4, 4, 4, 3, 2, 1];
+% course_x = round(linspace(-1, 10, 10));
+% course_y = [0, 1, 2, 3, 4, 4, 4, 3, 2, 1];
 
-% course_x = round(1 : 1 : 500); %cm
-% course_y = round(-sin(course_x/50) * 100); %cm
+course_x = round(1 : 1 : 500); %cm
+course_y = round(-sin(course_x/50) * 100); %cm
 % course = [[0, 1, 2, 3, 4, 5]; [0, 0, 1, 1, 2, 2]];
 
 figure(1)
@@ -56,8 +56,8 @@ y = map.start_y;
 map.openAroundNode(x, y, g_cost); % 周りのノードをオープン
 
 g_cost = 1;
-for i = 1 : 5
-% while x ~= map.goal_x || y ~= map.goal_y
+% for i = 1 : 100
+while x ~= map.goal_x || y ~= map.goal_y
 
     [x, y] = map.searchRefNode(); %スコアが最も小さいノードのx, yを得る
     map.openAroundNode(x, y, g_cost);

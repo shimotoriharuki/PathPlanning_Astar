@@ -22,33 +22,33 @@ classdef Map < handle
             [obj.grid, obj.binary_grid] = createMap(obj.size_x, obj.size_y, obj.course_data, expantion);
             obj.shorter_path_grid = obj.binary_grid;
             
-            if course_data(1, 1) < 1
+            if course_data(1, 1) + 1 < 1
                 obj.start_x = 1;
-            elseif course_data(1, 1) > obj.size_y
+            elseif course_data(1, 1) + 1 > obj.size_y
                 obj.start_x = obj.size_y;
             else
                 obj.start_x = course_data(1, 1) + 1;
             end
             
-            if course_data(2, 1) < 1
+            if course_data(2, 1) + 1 < 1
                 obj.start_y = 1;   
-            elseif course_data(2, 1) > obj.size_y
+            elseif course_data(2, 1) + 1 > obj.size_y
                obj.start_y =  obj.size_y;   
             else 
                 obj.start_y = course_data(2, 1) + 1;
             end
                 
-            if course_data(1, end) < 1
+            if course_data(1, end) + 1 < 1
                 obj.goal_x = 1;
-            elseif course_data(1, end) > obj.size_x
+            elseif course_data(1, end) + 1 > obj.size_x
                 obj.goal_x = obj.size_x;
             else
                 obj.goal_x = course_data(1, end) + 1;
             end
             
-            if course_data(2, end) < 1
+            if course_data(2, end) + 1 < 1
                 obj.goal_y =  1;
-            elseif course_data(2, end) > obj.size_y
+            elseif course_data(2, end) + 1 > obj.size_y
                obj.goal_y =  obj.size_y;   
             else 
                obj.goal_y = course_data(2, end) + 1;
@@ -62,7 +62,7 @@ classdef Map < handle
         
         function calcScore(obj, x, y, g_cost)
             obj.grid(y, x).g_cost = g_cost;
-            obj.grid(y, x).h_cost = obj.goal_x - x + obj.goal_y - y;
+            obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
             obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
         end
         
@@ -92,9 +92,9 @@ classdef Map < handle
                         temp_node.score = obj.grid(y, x).score;
                         temp_node.g_cost = obj.grid(y, x).g_cost;
                         temp_node.h_cost = obj.grid(y, x).h_cost;
-%                         obj.open_list = [obj.open_list, temp_node]; %オープンリストに追加
+                        temp_node.status = obj.grid(y, x).status;
                         obj.open_list = [obj.open_list, temp_node]; %オープンリストに追加
-
+                        
                         obj.grid(y, x).parent = [ref_x, ref_y]; %親ノードの位置を保存
   
                     end
