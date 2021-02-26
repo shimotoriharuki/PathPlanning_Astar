@@ -24,6 +24,12 @@ classdef Map
             obj.goal_y = course_data(2, end) + 1;
         end
         
+        function calcScore(obj, x, y)
+            obj.grid(y, x).g_cost = 0;
+            obj.grid(y, x).h_cost = obj.goal_x - x + obj.goal_y - y;
+            obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
+        end
+        
     end
 
        

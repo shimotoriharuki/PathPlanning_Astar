@@ -1,4 +1,4 @@
-classdef Node
+classdef Node < handle
     properties
         obstacle % 0:障害物なし, 1:障害物
         status % 0:None, 1:Open, -1:close

@@ -1,4 +1,4 @@
-%% 前処理 master
+% 前処理 master
 clc
 clf
 clear
@@ -50,15 +50,8 @@ ylabel('y')
 % 計算
 % -----------A star開始------------ %
 
-map.grid(1, 1).score = calcScore(map, 1, 1); %スタートのスコアを計算
+map.calcScore(1, 1);
 map.grid(1, 1).score
-% map.grid(1, 1).score = 10;
-
-function score = calcScore(map, x, y)
-    map.grid(y, x).g_cost = 0;
-    map.grid(y, x).h_cost = map.goal_x - x + map.goal_y - y;
-    score = map.grid(y, x).g_cost + map.grid(y, x).h_cost;
-end
 
 
 
