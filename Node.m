@@ -5,7 +5,7 @@ classdef Node < handle
         g_cost
         h_cost
         score
-        pearent % [x, y]
+        parent % [x, y]
     end
     methods
         function obj = Node(obstacle_flag)
@@ -14,7 +14,7 @@ classdef Node < handle
             obj.g_cost = 0;
             obj.h_cost = 0;
             obj.score = 0;
-            obj.pearent = [0, 0];
+            obj.parent = [];
         end
     end
 end
