@@ -24,6 +24,7 @@ classdef Map < handle
             
             if course_data(1, 1) < 1
                 obj.start_x = 1;
+            elseif course_data(1, 1) > obj.size_y
             else
                 obj.start_x = course_data(1, 1);
             end
@@ -106,11 +107,19 @@ classdef Map < handle
             minimum = min(min(scores));
             index = find(scores == minimum); % 最小スコアのインデックスを取得
             
-            if length(index) > 1 %最小のコストが複数あったら
-                for j = 1 : length(index)
-                    obj.open_list.g_cost
-                end
-            end
+%             if length(index) > 1 %最小のコストが複数あったら
+%                 disp('HERE')
+%                 min_cost = 99999;
+%                 min_index = [];
+%                 for j = index
+%                     if obj.open_list(j).g_cost < min_cost
+%                         min_cost = obj.open_list(j).g_cost;
+%                         min_index = j;
+%                     end
+%                 end     
+%             else 
+%                 min_index = index;
+%             end
 
             ref_x = obj.open_list(index).x;
             ref_y = obj.open_list(index).y;

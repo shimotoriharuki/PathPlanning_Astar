@@ -24,24 +24,34 @@ classdef Map < handle
             
             if course_data(1, 1) < 1
                 obj.start_x = 1;
+            elseif course_data(1, 1) > obj.size_y
+                obj.start_x = obj.size_y;
             else
-                obj.start_x = course_data(1, 1);
+                obj.start_x = course_data(1, 1) + 1;
             end
-            if course_data(2, 1) > obj.size_y
+            
+            if course_data(2, 1) < 1
+                obj.start_y = 1;   
+            elseif course_data(2, 1) > obj.size_y
                obj.start_y =  obj.size_y;   
             else 
-                obj.start_y = course_data(2, 1);
+                obj.start_y = course_data(2, 1) + 1;
             end
                 
             if course_data(1, end) < 1
                 obj.goal_x = 1;
+            elseif course_data(1, end) > obj.size_x
+                obj.goal_x = obj.size_x;
             else
-                obj.goal_x = course_data(1, end);
+                obj.goal_x = course_data(1, end) + 1;
             end
-            if course_data(2, end) > obj.size_y
+            
+            if course_data(2, end) < 1
+                obj.goal_y =  1;
+            elseif course_data(2, end) > obj.size_y
                obj.goal_y =  obj.size_y;   
             else 
-               obj.goal_y = course_data(2, end);
+               obj.goal_y = course_data(2, end) + 1;
             end
             
 %             obj.start_x = course_data(1, 1);
@@ -81,8 +91,10 @@ classdef Map < handle
                         temp_node.y = y;
                         temp_node.score = obj.grid(y, x).score;
                         temp_node.g_cost = obj.grid(y, x).g_cost;
+                        temp_node.h_cost = obj.grid(y, x).h_cost;
+%                         obj.open_list = [obj.open_list, temp_node]; %オープンリストに追加
                         obj.open_list = [obj.open_list, temp_node]; %オープンリストに追加
-                        
+
                         obj.grid(y, x).parent = [ref_x, ref_y]; %親ノードの位置を保存
   
                     end

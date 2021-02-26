@@ -4,11 +4,11 @@ clf
 clear
 
 % --------------コースデータ用意-----------------%
-% course_x = round(linspace(0, 10, 5));
-% course_y = round(linspace(0, 5, 5));
+course_x = round(linspace(-1, 10, 10));
+course_y = [0, 1, 2, 3, 4, 4, 4, 3, 2, 1];
 
-course_x = round(1 : 1 : 500); %cm
-course_y = round(sin(course_x/50) * 100); %cm
+% course_x = round(1 : 1 : 500); %cm
+% course_y = round(-sin(course_x/50) * 100); %cm
 % course = [[0, 1, 2, 3, 4, 5]; [0, 0, 1, 1, 2, 2]];
 
 figure(1)
@@ -38,7 +38,7 @@ xlabel('x')
 ylabel('y')
 
 % -------------------マップ作成--------------------%
-expantion = round(10); %cm 膨張させる大きさ
+expantion = round(3); %cm 膨張させる大きさ
 map = Map(course, expantion); %バイナリマップ
 
 figure(3)
@@ -55,8 +55,9 @@ y = map.start_y;
 
 map.openAroundNode(x, y, g_cost); % 周りのノードをオープン
 
-% for i = 1 : 150
-while x ~= map.goal_x || y ~= map.goal_y
+g_cost = 1;
+for i = 1 : 5
+% while x ~= map.goal_x || y ~= map.goal_y
 
     [x, y] = map.searchRefNode(); %スコアが最も小さいノードのx, yを得る
     map.openAroundNode(x, y, g_cost);
