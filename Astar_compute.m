@@ -49,25 +49,33 @@ ylabel('y')
 
 % 計算
 % -----------A star開始------------ %
-map.calcScore(1, 1, 0); %スタートノードのスコアを計算
+g_cost = 0;
+x = 1;
+y = 1;
 
-map.openAroundNode(1, 1, 1); % 周りのノードをオープン
-% [x, y] = map.searchRefNode(); %スコアが最も小さいノードのx, yを得る
+map.openAroundNode(x, y, g_cost); % 周りのノードをオープン
 
+for i = 1 : 10
 
-g_cost = 2;
-% while x ~= map.goal_x || x ~= map.goal_y
-for i = 1 : 4
     [x, y] = map.searchRefNode(); %スコアが最も小さいノードのx, yを得る
     map.openAroundNode(x, y, g_cost);
-    
+
     g_cost = g_cost + 1;
+
 end
 
+map.shorter_path_grid(y, x) = 2;
+for i = 1 : 10
+    temp_xy = map.grid(y, x).parent;
+    x = temp_xy(1);
+    y = temp_xy(2);
+    
+    map.shorter_path_grid(y, x) = 2;
+    
+end
 
-
-
-
+figure(4)
+heatmap(map.shorter_path_grid)
 
 
 

@@ -6,6 +6,7 @@ classdef Map < handle
         course_data;
         grid;
         binary_grid
+        shorter_path_grid
         start_x;
         start_y;
         goal_x;
@@ -19,6 +20,7 @@ classdef Map < handle
             obj.size = obj.size_x * obj.size_y;
             obj.course_data = course_data;
             [obj.grid, obj.binary_grid] = createMap(obj.size_x, obj.size_y, obj.course_data, expantion);
+            obj.shorter_path_grid = obj.binary_grid;
             obj.start_x = course_data(1, 1) + 1;
             obj.start_y = course_data(2, 1) + 1;
             obj.goal_x = course_data(1, end) + 1;
@@ -62,26 +64,22 @@ classdef Map < handle
   
                     end
                     
-                    obj.closeNode(ref_y, ref_x); %基準ノードをクローズ
-%                     obj.open_list = [obj.open_list, temp_node]; %オープンリストからクローズした基準ノードを削除
+                    obj.grid(ref_y, ref_x).status = -1; %基準ノードをクローズ
+                    obj.deleteOpenList(ref_x, ref_y) %オープンリストからクローズした基準ノードを削除
                 end
                 
                 
             end
-            
+ 
         end
-        
-        function closeNode(obj, x, y)
-            obj.grid(y, x).status = -1;
-        end
-        
-        function [ref_x, ref_y] = searchRefNode(obj)
-            
+
+        function [ref_x, ref_y] = searchRefNode(obj)     
             scores = zeros(1, length(obj.open_list));
             
             for i = 1 : length(obj.open_list)
                 scores(i) = obj.open_list(i).score;
             end
+            
             minimum = min(min(scores));
             index = find(scores == minimum);
             
@@ -98,6 +96,14 @@ classdef Map < handle
             ref_x = obj.open_list(index).x;
             ref_y = obj.open_list(index).y;
 
+        end
+        
+        function deleteOpenList(obj, ref_x, ref_y)
+            for i = 1 : length(obj.open_list)
+                if obj.open_list(i).x == ref_x && obj.open_list(i).y == ref_y
+                    obj.open_list(i) = [];
+                end
+            end
         end
         
     end

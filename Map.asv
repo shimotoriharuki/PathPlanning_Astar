@@ -63,11 +63,12 @@ classdef Map < handle
                     end
                     
                     obj.closeNode(ref_y, ref_x); %基準ノードをクローズ
+                    obj.open_list = [obj.open_list, temp_node]; %オープンリストからクローズした基準ノードを削除
                 end
                 
                 
             end
-            
+ 
         end
         
         function closeNode(obj, x, y)
@@ -77,20 +78,34 @@ classdef Map < handle
         function [ref_x, ref_y] = searchRefNode(obj)
             
             scores = zeros(1, length(obj.open_list));
-            g_costs = zeros(1, length(obj.open_list));
+            
             for i = 1 : length(obj.open_list)
-                scores = [scores, obj.open_list(i).score];
-                g_costs = [scores, obj.open_list(i).g_cost];
+                scores(i) = obj.open_list(i).score;
             end
             minimum = min(min(scores));
-            index = find(obj.open_list.score == minimum);
-            if index 
+            index = find(scores == minimum);
+            
+%             if length(index) > 1 %最小のコストが複数あったら
+%                 g_costs = zeros(1, length(obj.open_list));
+%                 for i = index
+%                     g_costs(i) = obj.open_list(i).g_cost;
+%                 end
+%                 
+%                 minimum = min(min(g_costs));
+%                 index = find(scores == minimum);
+%             end
 
             ref_x = obj.open_list(index).x;
             ref_y = obj.open_list(index).y;
 
         end
         
+        function deleteOpenList(obj, ref_x, ref_y)
+            for i = 1 : length(obj.open_list)
+
+            end
+
+        end
     end
 
        

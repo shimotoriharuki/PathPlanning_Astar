@@ -4,8 +4,8 @@ clf
 clear
 
 % --------------コースデータ用意-----------------%
-course_x = round(linspace(0, 20, 10));
-course_y = round(linspace(0, 10, 10));
+course_x = round(linspace(0, 10, 5));
+course_y = round(linspace(0, 5, 5));
 
 % course_x = round(-1 : 1 : 5); %cm
 % course_y = round(sin(course_x/100) * 100); %cm
@@ -49,18 +49,26 @@ ylabel('y')
 
 % 計算
 % -----------A star開始------------ %
-map.calcScore(1, 1, 0); %スタートノードのスコアを計算
-
-map.openAroundNode(1, 1, 1); % 周りのノードをオープン
-
+g_cost = 0;
 x = 1;
 y = 1;
-g_cost = 
-[x, y] = map.searchRefNode(); %スコアが最も小さいノードのx, yを得る
 
-map.openAroundNode(x, y, 2);
+map.openAroundNode(x, y, g_cost); % 周りのノードをオープン
 
+for i = 1 : 10
 
+    [x, y] = map.searchRefNode(); %スコアが最も小さいノードのx, yを得る
+    map.openAroundNode(x, y, g_cost);
+
+    g_cost = g_cost + 1;
+
+end
+
+for i = 1 : 10
+    store_xy = map.grid(y, x).parent;
+    x = store_xy(1);
+    y = store_xy
+end
 
 
 
