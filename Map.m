@@ -21,10 +21,33 @@ classdef Map < handle
             obj.course_data = course_data;
             [obj.grid, obj.binary_grid] = createMap(obj.size_x, obj.size_y, obj.course_data, expantion);
             obj.shorter_path_grid = obj.binary_grid;
-            obj.start_x = course_data(1, 1) + 1;
-            obj.start_y = course_data(2, 1) + 1;
-            obj.goal_x = course_data(1, end) + 1;
-            obj.goal_y = course_data(2, end) + 1;
+            
+            if course_data(1, 1) < 1
+                obj.start_x = 1;
+            else
+                obj.start_x = course_data(1, 1);
+            end
+            if course_data(2, 1) > obj.size_y
+               obj.start_y =  obj.size_y;   
+            else 
+                obj.start_y = course_data(2, 1);
+            end
+                
+            if course_data(1, end) < 1
+                obj.goal_x = 1;
+            else
+                obj.goal_x = course_data(1, end);
+            end
+            if course_data(2, end) > obj.size_y
+               obj.goal_y =  obj.size_y;   
+            else 
+               obj.goal_y = course_data(2, end);
+            end
+            
+%             obj.start_x = course_data(1, 1);
+%             obj.start_y = course_data(2, 1);
+%             obj.goal_x = course_data(1, end);
+%             obj.goal_y = course_data(2, end);
         end
         
         function calcScore(obj, x, y, g_cost)
@@ -81,16 +104,20 @@ classdef Map < handle
             end
             
             minimum = min(min(scores));
-            index = find(scores == minimum);
+            index = find(scores == minimum); % 最小スコアのインデックスを取得
             
 %             if length(index) > 1 %最小のコストが複数あったら
-%                 g_costs = zeros(1, length(obj.open_list));
-%                 for i = index
-%                     g_costs(i) = obj.open_list(i).g_cost;
-%                 end
-%                 
-%                 minimum = min(min(g_costs));
-%                 index = find(scores == minimum);
+%                 disp('HERE')
+%                 min_cost = 99999;
+%                 min_index = [];
+%                 for j = index
+%                     if obj.open_list(j).g_cost < min_cost
+%                         min_cost = obj.open_list(j).g_cost;
+%                         min_index = j;
+%                     end
+%                 end     
+%             else 
+%                 min_index = index;
 %             end
 
             ref_x = obj.open_list(index).x;
@@ -102,6 +129,7 @@ classdef Map < handle
             for i = 1 : length(obj.open_list)
                 if obj.open_list(i).x == ref_x && obj.open_list(i).y == ref_y
                     obj.open_list(i) = [];
+                    break;
                 end
             end
         end

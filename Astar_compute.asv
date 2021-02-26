@@ -4,11 +4,11 @@ clf
 clear
 
 % --------------コースデータ用意-----------------%
-course_x = round(linspace(0, 10, 5));
-course_y = round(linspace(0, 5, 5));
+% course_x = round(linspace(0, 10, 5));
+% course_y = round(linspace(0, 5, 5));
 
-% course_x = round(-1 : 1 : 5); %cm
-% course_y = round(sin(course_x/100) * 100); %cm
+course_x = round(1 : 1 : 100); %cm
+course_y = round(sin(course_x/50) * 100); %cm
 % course = [[0, 1, 2, 3, 4, 5]; [0, 0, 1, 1, 2, 2]];
 
 figure(1)
@@ -38,7 +38,7 @@ xlabel('x')
 ylabel('y')
 
 % -------------------マップ作成--------------------%
-expantion = round(3); %cm 膨張させる大きさ
+expantion = round(10); %cm 膨張させる大きさ
 map = Map(course, expantion); %バイナリマップ
 
 figure(3)
@@ -48,14 +48,15 @@ xlabel('x')
 ylabel('y')
 
 % 計算
-% -----------A star開始------------ %
+% % -----------A star開始------------ %
 g_cost = 0;
-x = 1;
-y = 1;
+x = map.start_x;
+y = map.start_y;
 
 map.openAroundNode(x, y, g_cost); % 周りのノードをオープン
 
-for i = 1 : 10
+for i = 1 : 300
+% while x ~= map.goal_x || y ~= map.goal_y
 
     [x, y] = map.searchRefNode(); %スコアが最も小さいノードのx, yを得る
     map.openAroundNode(x, y, g_cost);
@@ -64,14 +65,20 @@ for i = 1 : 10
 
 end
 
-for i = 1 : 10
-    store_xy = map.grid(y, x).parent;
-    x = store_xy(1);
-    y = store_xy
+map.shorter_path_grid(y, x) = 2;
+% for i = 1 : 199
+while x ~= map.start_x || y ~= map.start_y
+
+    temp_xy = map.grid(y, x).parent;
+    x = temp_xy(1);
+    y = temp_xy(2);
+    
+    map.shorter_path_grid(y, x) = 2;
+    
 end
 
-
-
+figure(4)
+heatmap(map.shorter_path_grid)
 
 
 
