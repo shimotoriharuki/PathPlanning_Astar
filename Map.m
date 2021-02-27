@@ -61,7 +61,7 @@ classdef Map < handle
         end
         
         function calcScore(obj, x, y, g_cost)
-            obj.grid(y, x).g_cost = g_cost;
+            obj.grid(y, x).g_cost = g_cost + 1;
             obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
             obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
         end
@@ -85,7 +85,7 @@ classdef Map < handle
                     
                     if obj.grid(y, x).obstacle == 0 && obj.grid(y, x).status == 0 && ~(ref_x == x && ref_y == y) % 移動可能 かつ 状態がNone かつ 基準ノードでない
                         obj.grid(y, x).status = 1; % open
-                        obj.calcScore(x, y, g_cost) % コストを計算
+                        obj.calcScore(x, y, obj.grid(ref_y, ref_x).g_cost) % コストを計算
                         
                         temp_node.x = x;
                         temp_node.y = y;
@@ -118,22 +118,22 @@ classdef Map < handle
             minimum = min(min(scores));
             index = find(scores == minimum); % 最小スコアのインデックスを取得
             
-%             if length(index) > 1 %最小のコストが複数あったら
-%                 disp('HERE')
-%                 min_cost = 99999;
-%                 min_index = [];
-%                 for j = index
-%                     if obj.open_list(j).g_cost < min_cost
-%                         min_cost = obj.open_list(j).g_cost;
-%                         min_index = j;
-%                     end
-%                 end     
-%             else 
-%                 min_index = index;
-%             end
+            if length(index) > 1 %最小のコストが複数あったら
+                disp('HERE')
+                min_cost = 99999;
+                min_index = [];
+                for j = index
+                    if obj.open_list(j).g_cost < min_cost
+                        min_cost = obj.open_list(j).g_cost;
+                        min_index = j;
+                    end
+                end     
+            else 
+                min_index = index;
+            end
 
-            ref_x = obj.open_list(index).x;
-            ref_y = obj.open_list(index).y;
+            ref_x = obj.open_list(min_index).x;
+            ref_y = obj.open_list(min_index).y;
 
         end
         

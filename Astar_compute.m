@@ -7,8 +7,8 @@ clear
 % course_x = round(linspace(-1, 10, 10));
 % course_y = [0, 1, 2, 3, 4, 4, 4, 3, 2, 1];
 
-course_x = round(1 : 1 : 500); %cm
-course_y = round(-sin(course_x/50) * 100); %cm
+course_x = round(1 : 1 : 100); %cm
+course_y = round(-sin(course_x/10) * 50); %cm
 % course = [[0, 1, 2, 3, 4, 5]; [0, 0, 1, 1, 2, 2]];
 
 figure(1)
@@ -16,6 +16,7 @@ scatter(course_x, course_y)
 title('コース元データ')
 xlabel('x')
 ylabel('y')
+axis equal
 
 % ------------------正の整数にするためにマージンをとる---------------- %
 min_x = min(course_x);
@@ -36,9 +37,10 @@ scatter(course(1, :), course(2, :))
 title('マージンしたコースデータ')
 xlabel('x')
 ylabel('y')
+axis equal
 
 % -------------------マップ作成--------------------%
-expantion = round(3); %cm 膨張させる大きさ
+expantion = round(5); %cm 膨張させる大きさ
 map = Map(course, expantion); %バイナリマップ
 
 figure(3)
@@ -47,9 +49,10 @@ title('バイナリマップ')
 xlabel('x')
 ylabel('y')
 
+
 % 計算
 % % -----------A star開始------------ %
-g_cost = 0;
+g_cost = -1;
 x = map.start_x;
 y = map.start_y;
 
