@@ -61,8 +61,7 @@ classdef Map < handle
         end
         
         function calcScore(obj, x, y, g_cost, direction_cost)
-%             obj.grid(y, x).g_cost = g_cost + 1 + direction_cost;
-            obj.grid(y, x).g_cost = g_cost + 1;
+            obj.grid(y, x).g_cost = g_cost + 1 + direction_cost;
             obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
             obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
         end
@@ -156,10 +155,7 @@ classdef Map < handle
             end
         end
         
-        function cost_table = getCostTable(obj, x, y, pre_x, pre_y) % -の方向に進みやすい
-            
-            direction = obj.determineDirection(x, y, pre_x, pre_y);
-            
+        function cost_table = getCostTable(~, direction) % -の方向に進みやすい
             if strcmp(direction, 'u') % 上
                 cost_table = [-1, -1, -1;
                               1, 0, 1;
@@ -196,28 +192,13 @@ classdef Map < handle
                
         end
         
-        function direction = determineDirection(obj, x, y, pre_x, pre_y)
+        function determineDirection(obj, x, y, pre_x, pre_y)
             
             dx = x - pre_x;
             dy = y - pre_y;
             
             if dx > 0 && dy > 0
-                direction = 'rb';
-            elseif dx == 0 && dy > 0
-                direction = 'b';
-            elseif dx < 0 && dy > 0
-                direction = 'lb';
-            elseif dx < 0 && dy == 0
-                direction = 'l';
-            elseif dx < 0 && dy < 0
-                direction = 'lu';
-            elseif dx == 0 && dy < 0
-                direction = 'u';
-            elseif dx > 0 && dy < 0
-                direction = 'ru';
-            elseif dx > 0 && dy == 0
-                direction = 'r';
-            end
+                
             
         end
         

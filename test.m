@@ -1,4 +1,4 @@
-index = [3, 2, 2];
+index = [3, 2, 2, 1];
 cost = [1, 2, 3];
 
 if length(index) > 1 %最小のコストが複数あったら
@@ -12,5 +12,6 @@ if length(index) > 1 %最小のコストが複数あったら
         end
     end     
 else 
+    disp('here')
     min_index = index;
 end
