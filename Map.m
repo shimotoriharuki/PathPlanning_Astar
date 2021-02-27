@@ -61,9 +61,14 @@ classdef Map < handle
         end
         
         function calcScore(obj, x, y, g_cost, direction_cost)
-%             obj.grid(y, x).g_cost = g_cost + 1 + direction_cost;
-            obj.grid(y, x).g_cost = g_cost + 1;
-            obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
+            obj.grid(y, x).g_cost = g_cost + 1 + direction_cost;
+%             obj.grid(y, x).g_cost = g_cost + 1;
+%             obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
+            obj.grid(y, x).h_cost = sqrt(power(obj.goal_x - x, 2) + power(obj.goal_y - y, 2));
+%               obj.grid(y, x).h_cost = 0;
+
+%             obj.grid(y, x).h_cost = obj.goal_x - x + obj.goal_y - y;
+
             obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
         end
         
@@ -192,6 +197,10 @@ classdef Map < handle
                 cost_table = [-1, -1, 1;
                               -1, 0, 1;
                               1, 1, 1];
+            else
+                cost_table = [1, 1, 1;
+                              1, 0, 1;
+                              1, 1, 1];
             end
                
         end
@@ -218,6 +227,21 @@ classdef Map < handle
             elseif dx > 0 && dy == 0
                 direction = 'r';
             end
+
+%             if dx == 0 && dy > 0
+%                 direction = 'b';
+% 
+%             elseif dx < 0 && dy == 0
+%                 direction = 'l';
+% 
+%             elseif dx == 0 && dy < 0
+%                 direction = 'u';
+% 
+%             elseif dx > 0 && dy == 0
+%                 direction = 'r';
+%             else
+%                 direction = 'a'; % around
+%             end
             
         end
         
@@ -227,39 +251,39 @@ classdef Map < handle
 end
 
 function [grid, binary_grid] = createMap(x_size, y_size, course_data, expantion)
-empty_grid = repmat(Node(1), y_size, x_size); % 行、列　＝　y, x
-empty_binary_grid = ones(y_size, x_size); % 行、列　＝　y, x
+    empty_grid = repmat(Node(1), y_size, x_size); % 行、列　＝　y, x
+    empty_binary_grid = ones(y_size, x_size); % 行、列　＝　y, x
 
-x_datas = course_data(1, :);
-y_datas = course_data(2, :);
-half_expantion = round(expantion / 2);
-for i = 1 : length(x_datas)
-    for ex = 1 : expantion
-        for ey = 1 : expantion
-            x = x_datas(i) + 1 - half_expantion + ex;
-            y = y_datas(i) + 1 - half_expantion + ey;
+    x_datas = course_data(1, :);
+    y_datas = course_data(2, :);
+    half_expantion = round(expantion / 2);
+    for i = 1 : length(x_datas)
+        for ex = 1 : expantion
+            for ey = 1 : expantion
+                x = x_datas(i) + 1 - half_expantion + ex;
+                y = y_datas(i) + 1 - half_expantion + ey;
 
-            if x < 1
-               x = 1; 
-            elseif x > x_size
-                x = x_size;
+                if x < 1
+                   x = 1; 
+                elseif x > x_size
+                    x = x_size;
+                end
+                if y < 1
+                   y = 1; 
+                elseif y > y_size
+                    y = y_size;
+                end
+
+                empty_grid(y, x) = Node(0);
+                empty_binary_grid(y, x) = 0;
             end
-            if y < 1
-               y = 1; 
-            elseif y > y_size
-                y = y_size;
-            end
-
-            empty_grid(y, x) = Node(0);
-            empty_binary_grid(y, x) = 0;
         end
     end
-end
 
-grid = empty_grid;
-binary_grid = empty_binary_grid;
-%             grid = flipud(empty_grid); %上下反転する
-%             binary_grid = flipud(empty_binary_grid);
+    grid = empty_grid;
+    binary_grid = empty_binary_grid;
+    %             grid = flipud(empty_grid); %上下反転する
+    %             binary_grid = flipud(empty_binary_grid);
 
 end
 
