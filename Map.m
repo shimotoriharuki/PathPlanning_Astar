@@ -76,20 +76,71 @@ classdef Map < handle
             for i = -1 : 1
                 x = ref_x + i;
                 if x < 1
-                    x = 1;
+%                     x = 1;
                     continue;
                 elseif x > obj.size_x
-                    x = obj.size_x;
+%                     x = obj.size_x;
                     continue;
                 end
                 
                 for j =  -1 : 1
                     y = ref_y + j;
                     if y < 1
-                        y = 1;
+%                         y = 1;
                         continue;
                     elseif y > obj.size_y
-                        y = obj.size_y;
+%                         y = obj.size_y;
+                        continue;
+                    end
+                    
+                    
+                    
+                    if obj.grid(y, x).obstacle == 0 && obj.grid(y, x).status == 0 && ~(ref_x == x && ref_y == y) % 移動可能 かつ 状態がNone かつ 基準ノードでない
+                        obj.grid(y, x).status = 1; % open
+                        direction_cost = cost_table(j + 2, i + 2);
+                        obj.calcScore(x, y, obj.grid(ref_y, ref_x).g_cost, direction_cost) % コストを計算
+                        
+                        temp_node.x = x;
+                        temp_node.y = y;
+                        temp_node.score = obj.grid(y, x).score;
+                        temp_node.g_cost = obj.grid(y, x).g_cost;
+                        temp_node.h_cost = obj.grid(y, x).h_cost;
+                        obj.open_list = [obj.open_list, temp_node]; %オープンリストに追加
+                        
+                        obj.grid(y, x).parent = [ref_x, ref_y]; %親ノードの位置を保存
+                    end
+                    
+                    obj.grid(ref_y, ref_x).status = -1; %基準ノードをクローズ
+                    obj.deleteOpenList(ref_x, ref_y) %オープンリストからクローズした基準ノードを削除
+                end
+                
+                
+            end
+ 
+        end
+        function openAroundNodeDP(obj, ref_x, ref_y, cost_table) %Diagonal prohibition
+            for i = [0, -1, 1, 0]
+                x = ref_x + i;
+                if x < 1
+%                     x = 1;
+                    continue;
+                elseif x > obj.size_x
+%                     x = obj.size_x;
+                    continue;
+                end
+                
+                for j =  -1 : 1
+                    if i ~= 0
+                         y = ref_y;
+                    else
+                        y = ref_y + j;
+                    end
+                    
+                    if y < 1
+%                         y = 1;
+                        continue;
+                    elseif y > obj.size_y
+%                         y = obj.size_y;
                         continue;
                     end
                     
@@ -130,12 +181,12 @@ classdef Map < handle
             index = find(scores == minimum); % 最小スコアのインデックスを取得
             
             if length(index) > 1 %最小のコストが複数あったら
-                disp('HERE')
+%                 disp('HERE')
                 min_cost = 99999;
                 min_index = [];
                 for j = index
-                    disp(num2str(obj.open_list(j).x));
-                    disp(num2str(obj.open_list(j).y));
+%                     disp(num2str(obj.open_list(j).x));
+%                     disp(num2str(obj.open_list(j).y));
 
                     if obj.open_list(j).g_cost < min_cost
                         min_cost = obj.open_list(j).g_cost;
@@ -143,7 +194,7 @@ classdef Map < handle
                     end
                 end     
             else 
-                disp('here')
+%                 disp('here')
                 min_index = index;
             end
 
@@ -161,8 +212,7 @@ classdef Map < handle
             end
         end
         
-        function cost_table = getCostTable(obj, x, y, pre_x, pre_y) % -の方向に進みやすい
-            
+        function cost_table = getCostTable(obj, x, y, pre_x, pre_y)    
             direction = obj.determineDirection(x, y, pre_x, pre_y);
             
             if strcmp(direction, 'u') % 上
