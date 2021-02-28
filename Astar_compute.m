@@ -45,7 +45,7 @@ course = [course_x; course_y];
 
 
 % -------------------マップ作成--------------------%
-expantion = round(3); %cm 膨張させる大きさ
+expantion = round(10); %cm 膨張させる大きさ
 map = Map(course, expantion); %バイナリマップ
 
 figure(3)
@@ -62,22 +62,21 @@ y = map.start_y;
 pre_x = x;
 pre_y = y;
 
-g_cost = 0;
-% cost_table = [-1, -1, -1;
+% cost_table = [1, 1, 1;
 %               1, 0, 1;
-%               1, 1, 1];
+%               0, 0, 0];
 cost_table = [0, 0, 0;
               0, 0, 0;
               0, 0, 0];
           
-map.openAroundNodeDP(x, y, cost_table); % 周りのノードをオープン
+map.openAroundNodeDP(x, y, cost_table); % スタートノードの周りをオープン
 
 count = 0;
 % for i = 1 : 1 
 while x ~= map.goal_x || y ~= map.goal_y
 
     [x, y] = map.searchRefNode(); % スコアが最も小さいノードのx, yを得る
-%     cost_table = map.getCostTable(x, y, pre_x, pre_y); % コストテーブルを更新
+%     cost_table = map.getCostTable(x, y, pre_x, pre_y); % コストテーブルを更新 
     map.openAroundNodeDP(x, y, cost_table);
     
     pre_x = x;
@@ -88,6 +87,7 @@ while x ~= map.goal_x || y ~= map.goal_y
 end
 
 disp(count)
+
 % % -----------プロット------------ %
 map.shorter_path_grid(y, x) = 2;
 store_x = [];

@@ -17,11 +17,9 @@ classdef Map < handle
         function obj = Map(course_data, expantion) % x, y座標の行列　単位はcmにしたい
             obj.size_x = max(course_data(1, :)) - min(course_data(1, :)) + 1; % xのベクトルの最大値-最小値でマップのx方向サイズを計算 
             obj.size_y = max(course_data(2, :)) - min(course_data(2, :)) + 1; % yのベクトルの最大値-最小値でマップのy方向サイズを計算 
-            obj.size = obj.size_x * obj.size_y;
-            obj.course_data = course_data;
-            obj.createMap(expantion);
-            obj.shorter_path_grid = obj.binary_grid;
-            
+            obj.size = obj.size_x * obj.size_y; % マップのサイズを計算
+            obj.course_data = course_data; % コースデータを保存
+
             if course_data(1, 1) + 1 < 1
                 obj.start_x = 1;
             elseif course_data(1, 1) + 1 > obj.size_y
@@ -53,21 +51,18 @@ classdef Map < handle
             else 
                obj.goal_y = course_data(2, end) + 1;
             end
+           
+            obj.createMap(expantion); %マップを作製
+            obj.shorter_path_grid = obj.binary_grid; %
             
-%             obj.start_x = course_data(1, 1);
-%             obj.start_y = course_data(2, 1);
-%             obj.goal_x = course_data(1, end);
-%             obj.goal_y = course_data(2, end);
         end
         
         function calcScore(obj, x, y, g_cost, direction_cost)
             obj.grid(y, x).g_cost = g_cost + 1 + direction_cost;
 %             obj.grid(y, x).g_cost = g_cost + 1;
+
 %             obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
             obj.grid(y, x).h_cost = sqrt(power(obj.goal_x - x, 2) + power(obj.goal_y - y, 2));
-%               obj.grid(y, x).h_cost = 0;
-
-%             obj.grid(y, x).h_cost = obj.goal_x - x + obj.goal_y - y;
 
             obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
         end
@@ -320,7 +315,14 @@ classdef Map < handle
                         end
 
                         empty_grid(y, x) = Node(0);
-                        empty_binary_grid(y, x) = 0;
+                        
+                        if x == obj.start_x && y == obj.start_y
+                            empty_binary_grid(y, x) = 3;  
+                        elseif x == obj.goal_x && y == obj.goal_y
+                            empty_binary_grid(y, x) = 4; 
+                        else
+                            empty_binary_grid(y, x) = 0;
+                        end
                     end
                 end
             end
