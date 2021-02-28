@@ -1,21 +1,25 @@
 % 前処理 master
 clc
-clf
+close all
 clear
 
 % --------------コースデータ用意-----------------%
 % course_x = round(linspace(-1, 10, 10));
 % course_y = [0, 1, 2, 3, 4, 4, 4, 3, 2, 1];
 
-% course_x = round(1 : 1 : 100); %cm
-% course_y = round(-sin(course_x/10) * 50); %cm
+% course_x = round(1 : 1 : 20); %cm
+% course_y = round(-sin(course_x/10) * 20); %cm
 
 % course_x = [0, 1, 2, 3, 4, 5];
 % course_y = [0, 0, 1, 1, 2, 2];
 
-num = linspace(0, 1 * pi, 100);
-course_x = round(sin(num) * 50); %cm
-course_y = round(cos(num) * 50); %cm
+% num = linspace(0, 1 * pi, 100);
+% course_x = round(sin(num) * 50); %cm
+% course_y = round(cos(num) * 50); %cm
+
+num = linspace(0, 2 * pi, 100);
+course_x = round(sin(num) * 20); %cm
+course_y = round(sin(2 * num) * 20); %cm
 
 % num = linspace(0, 0.3 * pi, 100);
 % course_x = round(sin(1 * num) * 10); %cm
@@ -42,85 +46,51 @@ end
 
 course = [course_x; course_y];
 
+start_x = course(1, 1) + 1;
+start_y = course(2, 1) + 1;
+goalt_x = course(1, end) + 1;
+goal_y = course(2, end) + 1;
+
+remaining_course = course;
+for i = 1 : 2
+    % --------------交差しているところでコースデータを切る --------%
+    [trimming_course, remaining_course] = courseTrimer(remaining_course, 10, 10);
+
+    % -------------------マップ作成--------------------%
+    expantion = round(5); %cm 膨張させる大きさ
+    map = Map(course, trimming_course, expantion); %バイナリマップ
+
+    figure(3)
+    heatmap(map.binary_grid)
+    title('バイナリマップ')
+    xlabel('x')
+    ylabel('y')
 
 
-% -------------------マップ作成--------------------%
-expantion = round(10); %cm 膨張させる大きさ
-map = Map(course, expantion); %バイナリマップ
+    % 最短経路計算計算
+    [shortcut_course] = computeAstar(map);
 
-figure(3)
-heatmap(map.binary_grid)
-title('バイナリマップ')
-xlabel('x')
-ylabel('y')
+    figure(4)
+    heatmap(map.shorter_path_grid)
 
+    figure(5)
+    hold on
+%     scatter(trimming_course(1, :), trimming_course(2, :))
+    title('マージンしたコースデータ')
+    xlabel('x')
+    ylabel('y')
+    axis equal
 
-% 計算
-% % -----------A star開始------------ %
-x = map.start_x;
-y = map.start_y;
-pre_x = x;
-pre_y = y;
-
-% cost_table = [1, 1, 1;
-%               1, 0, 1;
-%               0, 0, 0];
-cost_table = [0, 0, 0;
-              0, 0, 0;
-              0, 0, 0];
-          
-map.openAroundNodeDP(x, y, cost_table); % スタートノードの周りをオープン
-
-count = 0;
-% for i = 1 : 1 
-while x ~= map.goal_x || y ~= map.goal_y
-
-    [x, y] = map.searchRefNode(); % スコアが最も小さいノードのx, yを得る
-%     cost_table = map.getCostTable(x, y, pre_x, pre_y); % コストテーブルを更新 
-    map.openAroundNodeDP(x, y, cost_table);
+    ones_matrix = ones(2, length(shortcut_course(1, :)));
+    shortcut_course = shortcut_course - ones_matrix; %行列のインデックスにするため、1を足していたのを引く
     
-    pre_x = x;
-    pre_y = y;
-    
-    count = count + 1;
-    
+    scatter(shortcut_course(1, :), shortcut_course(2, :))
+    title('ショートカット')
+    xlabel('x')
+    ylabel('y')
+    axis equal
+    hold off
 end
-
-disp(count)
-
-% % -----------プロット------------ %
-map.shorter_path_grid(y, x) = 2;
-store_x = [];
-store_y = [];
-while x ~= map.start_x || y ~= map.start_y
-
-    temp_xy = map.grid(y, x).parent;
-    x = temp_xy(1);
-    y = temp_xy(2);
-    
-    store_x = [store_x, x];
-    store_y = [store_y, y];
-    
-    map.shorter_path_grid(y, x) = 2;
-end
-
-figure(4)
-heatmap(map.shorter_path_grid)
-
-figure(5)
-hold on
-scatter(course(1, :), course(2, :))
-title('マージンしたコースデータ')
-xlabel('x')
-ylabel('y')
-axis equal
-
-scatter(store_x, store_y)
-title('ショートカット')
-xlabel('x')
-ylabel('y')
-axis equal
-hold off
 
 
 

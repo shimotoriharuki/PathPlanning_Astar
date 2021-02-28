@@ -14,7 +14,7 @@ classdef Map < handle
         open_list = [];
     end
     methods
-        function obj = Map(course_data, expantion) % x, y座標の行列　単位はcmにしたい
+        function obj = Map(course_data, trimming_course_data, expantion) % x, y座標の行列　単位はcmにしたい
             obj.size_x = max(course_data(1, :)) - min(course_data(1, :)) + 1; % xのベクトルの最大値-最小値でマップのx方向サイズを計算 
             obj.size_y = max(course_data(2, :)) - min(course_data(2, :)) + 1; % yのベクトルの最大値-最小値でマップのy方向サイズを計算 
             obj.size = obj.size_x * obj.size_y; % マップのサイズを計算
@@ -25,7 +25,7 @@ classdef Map < handle
             elseif course_data(1, 1) + 1 > obj.size_y
                 obj.start_x = obj.size_y;
             else
-                obj.start_x = course_data(1, 1) + 1;
+                obj.start_x = trimming_course_data(1, 1) + 1;
             end
             
             if course_data(2, 1) + 1 < 1
@@ -33,7 +33,7 @@ classdef Map < handle
             elseif course_data(2, 1) + 1 > obj.size_y
                obj.start_y =  obj.size_y;   
             else 
-                obj.start_y = course_data(2, 1) + 1;
+                obj.start_y = trimming_course_data(2, 1) + 1;
             end
                 
             if course_data(1, end) + 1 < 1
@@ -41,7 +41,7 @@ classdef Map < handle
             elseif course_data(1, end) + 1 > obj.size_x
                 obj.goal_x = obj.size_x;
             else
-                obj.goal_x = course_data(1, end) + 1;
+                obj.goal_x = trimming_course_data(1, end) + 1;
             end
             
             if course_data(2, end) + 1 < 1
@@ -49,10 +49,10 @@ classdef Map < handle
             elseif course_data(2, end) + 1 > obj.size_y
                obj.goal_y =  obj.size_y;   
             else 
-               obj.goal_y = course_data(2, end) + 1;
+               obj.goal_y = trimming_course_data(2, end) + 1;
             end
            
-            obj.createMap(expantion); %マップを作製
+            obj.createMap(trimming_course_data, expantion); %マップを作製
             obj.shorter_path_grid = obj.binary_grid; %
             
         end
@@ -290,12 +290,12 @@ classdef Map < handle
             
         end
         
-        function createMap(obj, expantion)
+        function createMap(obj, trimming_course_data, expantion)
             empty_grid = repmat(Node(1), obj.size_y, obj.size_x); % 行、列　＝　y, x
             empty_binary_grid = ones(obj.size_y, obj.size_x); % 行、列　＝　y, x
 
-            x_datas = obj.course_data(1, :);
-            y_datas = obj.course_data(2, :);
+            x_datas = trimming_course_data(1, :);
+            y_datas = trimming_course_data(2, :);
             half_expantion = round(expantion / 2);
             for i = 1 : length(x_datas)
                 for ex = 1 : expantion
@@ -317,9 +317,9 @@ classdef Map < handle
                         empty_grid(y, x) = Node(0);
                         
                         if x == obj.start_x && y == obj.start_y
-                            empty_binary_grid(y, x) = 3;  
+                            empty_binary_grid(y, x) = 2;  
                         elseif x == obj.goal_x && y == obj.goal_y
-                            empty_binary_grid(y, x) = 4; 
+                            empty_binary_grid(y, x) = 3; 
                         else
                             empty_binary_grid(y, x) = 0;
                         end
