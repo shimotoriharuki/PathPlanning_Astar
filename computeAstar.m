@@ -12,7 +12,7 @@ function shortcut_course = computeAstar(map)
                   0, 0, 0;
                   0, 0, 0];
 
-    map.openAroundNode(x, y, cost_table); % スタートノードの周りをオープン
+    map.openAroundNodeDP(x, y, cost_table); % スタートノードの周りをオープン
 
     count = 0;
     % for i = 1 : 1 
@@ -20,7 +20,7 @@ function shortcut_course = computeAstar(map)
 
         [x, y] = map.searchRefNode(); % スコアが最も小さいノードのx, yを得る
 %         cost_table = map.getCostTable(x, y, pre_x, pre_y); % コストテーブルを更新 
-        map.openAroundNode(x, y, cost_table);
+        map.openAroundNodeDP(x, y, cost_table);
 
         pre_x = x;
         pre_y = y;

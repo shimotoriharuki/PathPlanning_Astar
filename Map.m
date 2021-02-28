@@ -58,12 +58,13 @@ classdef Map < handle
         end
         
         function calcScore(obj, x, y, g_cost, direction_cost)
-            obj.grid(y, x).g_cost = g_cost + 1 + direction_cost;
-%             obj.grid(y, x).g_cost = g_cost + 1;
+%             obj.grid(y, x).g_cost = g_cost + 1 + direction_cost;
+            obj.grid(y, x).g_cost = g_cost + 1;
+%             obj.grid(y, x).g_cost = 0;
 
 %             obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
-            obj.grid(y, x).h_cost = sqrt(power(obj.goal_x - x, 2) + power(obj.goal_y - y, 2));
-
+%             obj.grid(y, x).h_cost = sqrt(power(obj.goal_x - x, 2) + power(obj.goal_y - y, 2));
+            obj.grid(y, x).h_cost = 0;
             obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
         end
         

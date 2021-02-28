@@ -17,13 +17,20 @@ clear
 % course_x = round(sin(num) * 50); %cm
 % course_y = round(cos(num) * 50); %cm
 
-num = linspace(0, 2 * pi, 100);
-course_x = round(sin(num) * 20); %cm
-course_y = round(sin(2 * num) * 20); %cm
+% num = linspace(0, 1.5 * pi, 200);
+% course_x = round(sin(num) * 20); %cm
+% course_y = round(sin(2 * num) * 20) + 10; %cm
 
 % num = linspace(0, 0.3 * pi, 100);
 % course_x = round(sin(1 * num) * 10); %cm
 % course_y = round(sin(4 * num) * 8); %cm
+
+fileName = 'course_data/2019Student.txt';
+positions = readmatrix(fileName); %[m}
+positions = positions .* 100; %cm
+course_x = round(positions(:, 1)');
+course_y = round(positions(:, 2)');
+
 
 figure(1)
 scatter(course_x, course_y)
@@ -48,17 +55,22 @@ course = [course_x; course_y];
 
 start_x = course(1, 1) + 1;
 start_y = course(2, 1) + 1;
-goalt_x = course(1, end) + 1;
+goal_x = course(1, end) + 1;
 goal_y = course(2, end) + 1;
 
 remaining_course = course;
-for i = 1 : 2
+
+expantion = round(10); %cm 膨張させる大きさ
+% map = Map(course, [0;0], expantion); %バイナリマップ
+
+for i = 1 : 1
+% while map.goal_x ~= goal_x || map.goal_y ~= goal_y
     % --------------交差しているところでコースデータを切る --------%
     [trimming_course, remaining_course] = courseTrimer(remaining_course, 10, 10);
 
     % -------------------マップ作成--------------------%
-    expantion = round(5); %cm 膨張させる大きさ
-    map = Map(course, trimming_course, expantion); %バイナリマップ
+    
+    map = Map(course, course, expantion); %バイナリマップ
 
     figure(3)
     heatmap(map.binary_grid)
@@ -75,7 +87,7 @@ for i = 1 : 2
 
     figure(5)
     hold on
-%     scatter(trimming_course(1, :), trimming_course(2, :))
+%     scatter(course(1, :), course(2, :))
     title('マージンしたコースデータ')
     xlabel('x')
     ylabel('y')
