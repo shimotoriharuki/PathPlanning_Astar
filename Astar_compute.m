@@ -7,15 +7,15 @@ clear
 % course_x = round(linspace(-1, 10, 10));
 % course_y = [0, 1, 2, 3, 4, 4, 4, 3, 2, 1];
 
-course_x = round(1 : 1 : 100); %cm
-course_y = round(-sin(course_x/10) * 50); %cm
+% course_x = round(1 : 1 : 100); %cm
+% course_y = round(-sin(course_x/10) * 50); %cm
 
 % course_x = [0, 1, 2, 3, 4, 5];
 % course_y = [0, 0, 1, 1, 2, 2];
 
-% num = linspace(0, 1 * pi, 100);
-% course_x = round(sin(num) * 50); %cm
-% course_y = round(cos(num) * 50); %cm
+num = linspace(0, 1 * pi, 100);
+course_x = round(sin(num) * 50); %cm
+course_y = round(cos(num) * 50); %cm
 
 % num = linspace(0, 0.3 * pi, 100);
 % course_x = round(sin(1 * num) * 10); %cm
@@ -45,7 +45,7 @@ course = [course_x; course_y];
 
 
 % -------------------マップ作成--------------------%
-expantion = round(5); %cm 膨張させる大きさ
+expantion = round(3); %cm 膨張させる大きさ
 map = Map(course, expantion); %バイナリマップ
 
 figure(3)
@@ -70,7 +70,7 @@ cost_table = [0, 0, 0;
               0, 0, 0;
               0, 0, 0];
           
-map.openAroundNode(x, y, cost_table); % 周りのノードをオープン
+map.openAroundNodeDP(x, y, cost_table); % 周りのノードをオープン
 
 count = 0;
 % for i = 1 : 1 
@@ -78,7 +78,7 @@ while x ~= map.goal_x || y ~= map.goal_y
 
     [x, y] = map.searchRefNode(); % スコアが最も小さいノードのx, yを得る
 %     cost_table = map.getCostTable(x, y, pre_x, pre_y); % コストテーブルを更新
-    map.openAroundNode(x, y, cost_table);
+    map.openAroundNodeDP(x, y, cost_table);
     
     pre_x = x;
     pre_y = y;

@@ -19,7 +19,7 @@ classdef Map < handle
             obj.size_y = max(course_data(2, :)) - min(course_data(2, :)) + 1; % yのベクトルの最大値-最小値でマップのy方向サイズを計算 
             obj.size = obj.size_x * obj.size_y;
             obj.course_data = course_data;
-            [obj.grid, obj.binary_grid] = createMap(obj.size_x, obj.size_y, obj.course_data, expantion);
+            obj.createMap(expantion);
             obj.shorter_path_grid = obj.binary_grid;
             
             if course_data(1, 1) + 1 < 1
@@ -295,46 +295,48 @@ classdef Map < handle
             
         end
         
+        function createMap(obj, expantion)
+            empty_grid = repmat(Node(1), obj.size_y, obj.size_x); % 行、列　＝　y, x
+            empty_binary_grid = ones(obj.size_y, obj.size_x); % 行、列　＝　y, x
+
+            x_datas = obj.course_data(1, :);
+            y_datas = obj.course_data(2, :);
+            half_expantion = round(expantion / 2);
+            for i = 1 : length(x_datas)
+                for ex = 1 : expantion
+                    for ey = 1 : expantion
+                        x = x_datas(i) + 1 - half_expantion + ex;
+                        y = y_datas(i) + 1 - half_expantion + ey;
+
+                        if x < 1
+                           x = 1; 
+                        elseif x > obj.size_x
+                            x = obj.size_x;
+                        end
+                        if y < 1
+                           y = 1; 
+                        elseif y > obj.size_y
+                            y = obj.size_y;
+                        end
+
+                        empty_grid(y, x) = Node(0);
+                        empty_binary_grid(y, x) = 0;
+                    end
+                end
+            end
+
+            obj.grid = empty_grid;
+            obj.binary_grid = empty_binary_grid;
+            %             grid = flipud(empty_grid); %上下反転する
+            %             binary_grid = flipud(empty_binary_grid);
+
+        end
+        
     end
 
        
 end
 
-function [grid, binary_grid] = createMap(x_size, y_size, course_data, expantion)
-    empty_grid = repmat(Node(1), y_size, x_size); % 行、列　＝　y, x
-    empty_binary_grid = ones(y_size, x_size); % 行、列　＝　y, x
 
-    x_datas = course_data(1, :);
-    y_datas = course_data(2, :);
-    half_expantion = round(expantion / 2);
-    for i = 1 : length(x_datas)
-        for ex = 1 : expantion
-            for ey = 1 : expantion
-                x = x_datas(i) + 1 - half_expantion + ex;
-                y = y_datas(i) + 1 - half_expantion + ey;
-
-                if x < 1
-                   x = 1; 
-                elseif x > x_size
-                    x = x_size;
-                end
-                if y < 1
-                   y = 1; 
-                elseif y > y_size
-                    y = y_size;
-                end
-
-                empty_grid(y, x) = Node(0);
-                empty_binary_grid(y, x) = 0;
-            end
-        end
-    end
-
-    grid = empty_grid;
-    binary_grid = empty_binary_grid;
-    %             grid = flipud(empty_grid); %上下反転する
-    %             binary_grid = flipud(empty_binary_grid);
-
-end
 
     
