@@ -11,7 +11,7 @@ function [trimming_course, remaining_course] = courseTrimer(course, range, searc
         flag = ge(total, 1); % 1以上（1つでも外れ値があったら）だったら交差している
         
         if flag == 1 % 交差点だったら
-            disp('here')
+%             disp('here')
             trimming_course = [course(1, 1 : i); course(2, 1 : i)];
             
             % 残りのコースを返す

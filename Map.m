@@ -52,7 +52,7 @@ classdef Map < handle
                obj.goal_y = trimming_course_data(2, end) + 1;
             end
            
-            obj.createMap(trimming_course_data, expantion); %マップを作製
+            obj.createMap(course_data, expantion); %マップを作製
             obj.shorter_path_grid = obj.binary_grid; %
             
         end
@@ -63,8 +63,8 @@ classdef Map < handle
 %             obj.grid(y, x).g_cost = 0;
 
 %             obj.grid(y, x).h_cost = abs(obj.goal_x - x) + abs(obj.goal_y - y);
-%             obj.grid(y, x).h_cost = sqrt(power(obj.goal_x - x, 2) + power(obj.goal_y - y, 2));
-            obj.grid(y, x).h_cost = 0;
+            obj.grid(y, x).h_cost = sqrt(power(obj.goal_x - x, 2) + power(obj.goal_y - y, 2));
+%             obj.grid(y, x).h_cost = 0;
             obj.grid(y, x).score = obj.grid(y, x).g_cost + obj.grid(y, x).h_cost;
         end
         
@@ -194,8 +194,8 @@ classdef Map < handle
                 min_index = index;
             end
 
-            ref_x = obj.open_list(min_index).x;
-            ref_y = obj.open_list(min_index).y;
+            ref_x = obj.open_list(index).x;
+            ref_y = obj.open_list(index).y;
 
         end
         

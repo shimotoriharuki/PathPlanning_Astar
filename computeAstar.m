@@ -5,9 +5,9 @@ function shortcut_course = computeAstar(map)
     pre_x = x;
     pre_y = y;
 
-    % cost_table = [1, 1, 1;
-    %               1, 0, 1;
-    %               0, 0, 0];
+%     cost_table = [1, 1, 1;
+%                   1, 0, 1;
+%                   0, 0, 0];
     cost_table = [0, 0, 0;
                   0, 0, 0;
                   0, 0, 0];
