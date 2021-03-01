@@ -17,9 +17,9 @@ clear
 % course_x = round(sin(num) * 50); %cm
 % course_y = round(cos(num) * 50); %cm
 
-% num = linspace(0, 1.5 * pi, 200);
+% num = linspace(0, 1.5 * pi, 500);
 % course_x = round(sin(num) * 20); %cm
-% course_y = round(sin(2 * num) * 20) + 10; %cm
+% course_y = round(sin(2 * num) * 20); %cm
 
 % num = linspace(0, 0.3 * pi, 100);
 % course_x = round(sin(1 * num) * 10); %cm
@@ -60,13 +60,13 @@ goal_y = course(2, end) + 1;
 
 remaining_course = course;
 
-expantion = round(10); %cm 膨張させる大きさ
+expantion = round(3); %cm 膨張させる大きさ
 map = Map(course, [0;0], expantion); %バイナリマップ
 
-% for i = 1 : 1
+% for i = 1 : 7
 while map.goal_x ~= goal_x || map.goal_y ~= goal_y
     % --------------交差しているところでコースデータを切る --------%
-    [trimming_course, remaining_course] = courseTrimer(remaining_course, 5, 10);
+    [trimming_course, remaining_course] = courseTrimer(remaining_course, 5, 30);
 
     % -------------------マップ作成--------------------%
     

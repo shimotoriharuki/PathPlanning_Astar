@@ -20,39 +20,39 @@ classdef Map < handle
             obj.size = obj.size_x * obj.size_y; % マップのサイズを計算
             obj.course_data = course_data; % コースデータを保存
 
-            if course_data(1, 1) + 1 < 1
+            if trimming_course_data(1, 1) + 1 < 1
                 obj.start_x = 1;
-            elseif course_data(1, 1) + 1 > obj.size_y
+            elseif trimming_course_data(1, 1) + 1 > obj.size_y
                 obj.start_x = obj.size_y;
             else
                 obj.start_x = trimming_course_data(1, 1) + 1;
             end
             
-            if course_data(2, 1) + 1 < 1
+            if trimming_course_data(2, 1) + 1 < 1
                 obj.start_y = 1;   
-            elseif course_data(2, 1) + 1 > obj.size_y
+            elseif trimming_course_data(2, 1) + 1 > obj.size_y
                obj.start_y =  obj.size_y;   
             else 
                 obj.start_y = trimming_course_data(2, 1) + 1;
             end
                 
-            if course_data(1, end) + 1 < 1
+            if trimming_course_data(1, end) + 1 < 1
                 obj.goal_x = 1;
-            elseif course_data(1, end) + 1 > obj.size_x
+            elseif trimming_course_data(1, end) + 1 > obj.size_x
                 obj.goal_x = obj.size_x;
             else
                 obj.goal_x = trimming_course_data(1, end) + 1;
             end
             
-            if course_data(2, end) + 1 < 1
+            if trimming_course_data(2, end) + 1 < 1
                 obj.goal_y =  1;
-            elseif course_data(2, end) + 1 > obj.size_y
+            elseif trimming_course_data(2, end) + 1 > obj.size_y
                obj.goal_y =  obj.size_y;   
             else 
                obj.goal_y = trimming_course_data(2, end) + 1;
             end
            
-            obj.createMap(course_data, expantion); %マップを作製
+            obj.createMap(trimming_course_data, expantion); %マップを作製
             obj.shorter_path_grid = obj.binary_grid; %
             
         end
