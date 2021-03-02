@@ -60,16 +60,15 @@ goal_y = course(2, end) + 1;
 
 remaining_course = course;
 
-expantion = round(3); %cm 膨張させる大きさ
+expantion = round(5); %cm 膨張させる大きさ
 map = Map(course, [0;0], expantion); %バイナリマップ
 
-% for i = 1 : 7
-while map.goal_x ~= goal_x || map.goal_y ~= goal_y
+for i = 1 : 4
+% while map.goal_x ~= goal_x || map.goal_y ~= goal_y
     % --------------交差しているところでコースデータを切る --------%
-    [trimming_course, remaining_course] = courseTrimer(remaining_course, 5, 30);
+    [trimming_course, remaining_course] = courseTrimer(remaining_course, 10, 20);
 
     % -------------------マップ作成--------------------%
-    
     map = Map(course, trimming_course, expantion); %バイナリマップ
 
     figure(3)
@@ -87,7 +86,7 @@ while map.goal_x ~= goal_x || map.goal_y ~= goal_y
 
     figure(5)
     hold on
-    scatter(course(1, :), course(2, :))
+%     scatter(course(1, :), course(2, :))
     title('マージンしたコースデータ')
     xlabel('x')
     ylabel('y')

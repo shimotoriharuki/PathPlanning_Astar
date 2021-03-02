@@ -299,30 +299,60 @@ classdef Map < handle
             y_datas = trimming_course_data(2, :);
             half_expantion = round(expantion / 2);
             for i = 1 : length(x_datas)
-                for ex = 1 : expantion
-                    for ey = 1 : expantion
-                        x = x_datas(i) + 1 - half_expantion + ex;
-                        y = y_datas(i) + 1 - half_expantion + ey;
+                if i >= 5
+                    for ex = 1 : expantion
+                        for ey = 1 : expantion
+                            x = x_datas(i) + 1 - half_expantion + ex;
+                            y = y_datas(i) + 1 - half_expantion + ey;
 
-                        if x < 1
-                           x = 1; 
-                        elseif x > obj.size_x
-                            x = obj.size_x;
-                        end
-                        if y < 1
-                           y = 1; 
-                        elseif y > obj.size_y
-                            y = obj.size_y;
-                        end
+                            if x < 1
+                               x = 1; 
+                            elseif x > obj.size_x
+                                x = obj.size_x;
+                            end
+                            if y < 1
+                               y = 1; 
+                            elseif y > obj.size_y
+                                y = obj.size_y;
+                            end
 
-                        empty_grid(y, x) = Node(0);
-                        
-                        if x == obj.start_x && y == obj.start_y
-                            empty_binary_grid(y, x) = 2;  
-                        elseif x == obj.goal_x && y == obj.goal_y
-                            empty_binary_grid(y, x) = 3; 
-                        else
-                            empty_binary_grid(y, x) = 0;
+                            empty_grid(y, x) = Node(0);
+
+                            if x == obj.start_x && y == obj.start_y
+                                empty_binary_grid(y, x) = 2;  
+                            elseif x == obj.goal_x && y == obj.goal_y
+                                empty_binary_grid(y, x) = 3; 
+                            else
+                                empty_binary_grid(y, x) = 0;
+                            end
+                        end
+                    end
+                else
+                    for ex = 1 : 1
+                        for ey = 1 : 1
+                            x = x_datas(i) + 1 - 1 + ex;
+                            y = y_datas(i) + 1 - 1 + ey;
+
+                            if x < 1
+                               x = 1; 
+                            elseif x > obj.size_x
+                                x = obj.size_x;
+                            end
+                            if y < 1
+                               y = 1; 
+                            elseif y > obj.size_y
+                                y = obj.size_y;
+                            end
+
+                            empty_grid(y, x) = Node(0);
+
+                            if x == obj.start_x && y == obj.start_y
+                                empty_binary_grid(y, x) = 2;  
+                            elseif x == obj.goal_x && y == obj.goal_y
+                                empty_binary_grid(y, x) = 3; 
+                            else
+                                empty_binary_grid(y, x) = 0;
+                            end
                         end
                     end
                 end
