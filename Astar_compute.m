@@ -1,6 +1,7 @@
 % 前処理 master
 clc
-close all
+% close all
+clf
 clear
 
 % --------------コースデータ用意-----------------%
@@ -25,7 +26,7 @@ clear
 % course_x = round(sin(1 * num) * 10); %cm
 % course_y = round(sin(4 * num) * 8); %cm
 
-fileName = 'course_data/2019Student.txt';
+fileName = 'course_data/2019East.txt';
 positions = readmatrix(fileName); %[m}
 positions = positions .* 100; %cm
 course_x = round(positions(:, 1)');
@@ -60,11 +61,12 @@ goal_y = course(2, end) + 1;
 
 remaining_course = course;
 
-expantion = round(5); %cm 膨張させる大きさ
+expantion = round(8); %cm 膨張させる大きさ
 map = Map(course, [0;0], expantion); %バイナリマップ
 
-for i = 1 : 4
-% while map.goal_x ~= goal_x || map.goal_y ~= goal_y
+
+% for i = 1 : 1
+while map.goal_x ~= goal_x || map.goal_y ~= goal_y
     % --------------交差しているところでコースデータを切る --------%
     [trimming_course, remaining_course] = courseTrimer(remaining_course, 10, 20);
 
@@ -86,7 +88,7 @@ for i = 1 : 4
 
     figure(5)
     hold on
-%     scatter(course(1, :), course(2, :))
+    scatter(course(1, :), course(2, :), '*', 'b')
     title('マージンしたコースデータ')
     xlabel('x')
     ylabel('y')
@@ -95,7 +97,7 @@ for i = 1 : 4
     ones_matrix = ones(2, length(shortcut_course(1, :)));
     shortcut_course = shortcut_course - ones_matrix; %行列のインデックスにするため、1を足していたのを引く
     
-    scatter(shortcut_course(1, :), shortcut_course(2, :))
+    scatter(shortcut_course(1, :), shortcut_course(2, :), 'o')
     title('ショートカット')
     xlabel('x')
     ylabel('y')
